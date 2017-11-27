@@ -26,7 +26,15 @@
 
 var inquirer = require("inquirer");
 
-var questions = {};
+var questions = [
+    {
+        type:"list",
+        name:"guess",
+        message: "Attack zombie - Guess",
+        choices: [1, 2, 3, 4, 5],
+        default: 1
+    }
+];
 
 var player = {
     health:100,
@@ -57,11 +65,26 @@ function initGame(){
 
 }
 
+function initZombie(){
+    health = randomIntFromInterval(10,25);
+    strength = randomIntFromInterval(5,20);
+    secretNumber = randomIntFromInterval(1,5);
+    console.log("New Zombie!");
+}
+
 function nextZombie(){
     //check roll
     //check gameover
    if( zombie.secretNumber === player.guess ){
         zombie.takeDamage();
+   }else{
+       player.takeDamage();
+   }
+
+   if(zombie.health <= 0){ //create new zombie. 
+        initZombie();
+        player.zombiesKilled++;
+        console.log("Zombie Killed!");
    }
 }
 
