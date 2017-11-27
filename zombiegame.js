@@ -31,7 +31,7 @@ var questions = [
         type:"list",
         name:"guess",
         message: "Attack zombie - Guess",
-        choices: [1, 2, 3, 4, 5],
+        choices: ["1", "2", "3", "4", "5"],
         default: 1
     }
 ];
@@ -55,14 +55,20 @@ var zombie = {
     }
 };
 
-while(player.health > 0){ //check player is alive
+function getInput(){
     inquirer.prompt(questions).then(function(inquirerResponse){
         //inquirerResponse.name;
+        player.guess = inquirerResponse.guess;
+        nextZombie();
     });
 }
 
-function initGame(){
 
+if(player.health <= 0)  
+    console.log("game over");
+
+function initGame(){
+    getInput();
 }
 
 function initZombie(){
@@ -75,7 +81,9 @@ function initZombie(){
 function nextZombie(){
     //check roll
     //check gameover
-   if( zombie.secretNumber === player.guess ){
+    console.log("Player Health " + player.health + " Player Guess: " + player.guess);
+    console.log("Zombie Health " + zombie.health + " Zombie Guess: " + zombie.secretNumber);
+   if( parseInt( zombie.secretNumber ) === parseInt( player.guess ) ){
         zombie.takeDamage();
    }else{
        player.takeDamage();
@@ -86,8 +94,15 @@ function nextZombie(){
         player.zombiesKilled++;
         console.log("Zombie Killed!");
    }
+
+   if(player.health > 0){
+       getInput();
+   }
 }
 
 function randomIntFromInterval(min,max){ //get random number
     return Math.floor(Math.random()*(max-min+1)+min);
 }
+
+//RUNTIME
+initGame();
